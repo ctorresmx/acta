@@ -1,7 +1,7 @@
 use clap::{Parser, Subcommand};
 
 pub fn parse_args() -> Args {
-    return Args::parse();
+    Args::parse()
 }
 
 pub fn handle_command(command: Commands) {

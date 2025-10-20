@@ -69,7 +69,7 @@ impl std::error::Error for ActaError {}
 /// # Examples
 ///
 /// ```no_run
-/// use acta::persistance::init;
+/// use acta::persistence::init;
 ///
 /// let path = init().expect("Failed to initialize storage");
 /// println!("Storage initialized at: {:?}", path);
@@ -103,7 +103,7 @@ pub fn init() -> Result<PathBuf, ActaError> {
 /// # Examples
 ///
 /// ```no_run
-/// use acta::persistance::read;
+/// use acta::persistence::read;
 ///
 /// let todos = read().expect("Failed to read todos");
 /// println!("Found {} todos", todos.len());
@@ -137,7 +137,7 @@ pub fn read() -> Result<Vec<Todo>, ActaError> {
 /// # Examples
 ///
 /// ```no_run
-/// use acta::persistance::write;
+/// use acta::persistence::write;
 /// use acta::model::Todo;
 ///
 /// let todos = vec![/* ... */];
