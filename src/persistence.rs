@@ -1,10 +1,10 @@
 //! # Persistence
 //!
 //! `persistence` contains the functions to manipulate the todo data.
-use std::fmt;
 use std::fs;
 use std::io;
 use std::path::PathBuf;
+use thiserror::Error;
 
 use crate::model::Todo;
 use dirs::home_dir;
@@ -17,39 +17,18 @@ const FILE_NAME: &str = ".acta";
 /// This enum encapsulates all possible errors that can occur during
 /// file persistence operations, including I/O errors, JSON parsing errors,
 /// and missing home directory errors.
-#[derive(Debug)]
+#[derive(Error, Debug)]
 pub enum ActaError {
     /// Wraps standard I/O errors from file operations
-    Io(io::Error),
+    #[error("IO error: {0}")]
+    Io(#[from] io::Error),
     /// Wraps JSON serialization/deserialization errors
-    Parse(serde_json::Error),
+    #[error("Parse error: {0}")]
+    Parse(#[from] serde_json::Error),
     /// Indicates that the user's home directory could not be determined
+    #[error("Could not find home directory")]
     HomeDir,
 }
-
-impl fmt::Display for ActaError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        match self {
-            ActaError::Io(e) => write!(f, "IO error: {}", e),
-            ActaError::Parse(e) => write!(f, "Parse error: {}", e),
-            ActaError::HomeDir => write!(f, "Could not find home directory"),
-        }
-    }
-}
-
-impl From<io::Error> for ActaError {
-    fn from(err: io::Error) -> ActaError {
-        ActaError::Io(err)
-    }
-}
-
-impl From<serde_json::Error> for ActaError {
-    fn from(err: serde_json::Error) -> ActaError {
-        ActaError::Parse(err)
-    }
-}
-
-impl std::error::Error for ActaError {}
 
 /// Initializes the storage file in the home directory
 ///
